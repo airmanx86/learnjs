@@ -13,6 +13,10 @@ learnjs.problems = [
     }
 ];
 
+learnjs.template = function(name) {
+    return $('.templates .' + name).clone();
+}
+
 learnjs.applyObject = function applyObject(obj, elem) {
     for (let key in obj) {
         elem.find('[data-name="' + key + '"]').text(obj[key]);
@@ -26,9 +30,23 @@ learnjs.flashElement = function (elem, content) {
     });
 }
 
+learnjs.buildCorrectFlash = function (problemNum) {
+    const correctFlash = learnjs.template('correct-flash');
+    const link = correctFlash.find('a');
+
+    if (problemNum < learnjs.problems.length) {
+        link.attr('href', '#problem-' + (problemNum + 1));
+    } else {
+        link.attr('href', '');
+        link.text("You're Finished!");
+    }
+
+    return correctFlash;
+}
+  
 learnjs.problemView = function problemView(data) {
     const problemNumber = parseInt(data, 10);
-    const view = $('.templates .problem-view').clone();
+    const view = learnjs.template('problem-view');
     const problemData = learnjs.problems[problemNumber - 1];
     const resultFlash = view.find('.result');
 
@@ -40,10 +58,12 @@ learnjs.problemView = function problemView(data) {
 
     function checkAnswerClick() {
         if (checkAnswer()) {
-            learnjs.flashElement(resultFlash, 'Correct!');
+            const flashContent = learnjs.buildCorrectFlash(problemNumber);
+            learnjs.flashElement(resultFlash, flashContent);
         } else {
             learnjs.flashElement(resultFlash, 'Incorrect!');
         }
+
         return false;
     }
 
