@@ -28,7 +28,7 @@ jobs:
 
       - run:
           name: Deploy to S3
-          command: ​​./sspa​​ ​​deploy_bucket​​ ​​learnjs-test.airmanx86.io
+          command: ./sspa deploy_bucket learnjs-test.airmanx86.io
 
   deploy:
     docker:
@@ -45,7 +45,7 @@ jobs:
 
       - run:
           name: Deploy to S3
-          command: ​​./sspa​​ ​​deploy_bucket​​ ​​learnjs.airmanx86.io
+          command: ./sspa deploy_bucket learnjs.airmanx86.io
 
 workflows:
   version: 2
