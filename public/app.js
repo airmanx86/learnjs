@@ -4,12 +4,12 @@ const learnjs = {};
 
 learnjs.problems = [
     {
-      description: "What is truth?",
-      code: "function problem() { return __; }"
+        description: 'What is truth?',
+        code: 'function problem() { return __; }'
     },
     {
-      description: "Simple Math",
-      code: "function problem() { return 42 === 6 * __; }"
+        description: 'Simple Math',
+        code: 'function problem() { return 42 === 6 * __; }'
     }
 ];
 
@@ -18,6 +18,13 @@ learnjs.applyObject = function applyObject(obj, elem) {
         elem.find('[data-name="' + key + '"]').text(obj[key]);
     }
 };
+
+learnjs.flashElement = function (elem, content) {
+    elem.fadeOut('fast', function () {
+        elem.html(content);
+        elem.fadeIn();
+    });
+}
 
 learnjs.problemView = function problemView(data) {
     const problemNumber = parseInt(data, 10);
@@ -33,9 +40,9 @@ learnjs.problemView = function problemView(data) {
 
     function checkAnswerClick() {
         if (checkAnswer()) {
-            resultFlash.text("Correct!");
+            learnjs.flashElement(resultFlash, 'Correct!');
         } else {
-            resultFlash.text("Incorrect!");
+            learnjs.flashElement(resultFlash, 'Incorrect!');
         }
         return false;
     }
