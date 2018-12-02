@@ -1,0 +1,60 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10:13
+
+    working_directory: ~/repo
+
+    steps:
+      - run:
+          name: npm install
+          command: cd services && npm install
+
+  deploy-test:
+    docker:
+      - image: circleci/python:2.7-jessie
+
+    working_directory: ~/repo
+
+    steps:
+      - run:
+          name: Install awscli
+          command: sudo pip install awscli
+
+      - run:
+          name: Deploy to S3
+          command: ​​./sspa​​ ​​deploy_bucket​​ ​​learnjs-test.airmanx86.io
+
+  deploy:
+    docker:
+      - image: circleci/python:2.7-jessie
+
+    working_directory: ~/repo
+
+    steps:
+      - run:
+          name: Install awscli
+          command: sudo pip install awscli
+
+      - run:
+          name: Deploy to S3
+          command: ​​./sspa​​ ​​deploy_bucket​​ ​​learnjs.airmanx86.io
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy-test:
+          requires:
+            - build
+          context: learnjs
+      - hold:
+          type: approval
+          requires:
+            - deploy-test
+      - deploy:
+          requires:
+            - hold
+          context: learnjs
